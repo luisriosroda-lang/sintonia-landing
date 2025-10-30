@@ -137,13 +137,22 @@
 
 <footer>© <span id="year"></span> SintonIA Agency. Todos los derechos reservados.</footer>
 
-<script>
-  const CALENDLY_URL = "const CALENDLY_URL = "https://calendly.com/luisriosroda/30min";
-
-  function calendlyUrlWithParams(email){const base=CALENDLY_URL;const sep=base.includes('?')?'&':'?';const utm='utm_source=landing&utm_medium=cta&utm_campaign=demo';const mail=email?'&email='+encodeURIComponent(email):'';return base+sep+utm+mail;}
-  ['cta-header','cta-hero','cta-starter','cta-growth','cta-pro'].forEach(id=>{const el=document.getElementById(id); if(el) el.href=calendlyUrlWithParams('');});
-  document.getElementById('btn-demo').addEventListener('click',function(){const email=document.getElementById('email').value.trim();window.open(calendlyUrlWithParams(email),'_blank','noopener,noreferrer');});
+  <script>
+  const CALENDLY_URL = "https://calendly.com/luisriosroda/30min";  // ← con https://
+  function calendlyUrlWithParams(email){
+    const base = CALENDLY_URL;
+    const sep = base.includes('?') ? '&' : '?';
+    const utm = 'utm_source=landing&utm_medium=cta&utm_campaign=demo';
+    const mail = email ? '&email=' + encodeURIComponent(email) : '';
+    return base + sep + utm + mail;
+  }
+  ['cta-header','cta-hero','cta-starter','cta-growth','cta-pro'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.href=calendlyUrlWithParams('');
+  });
+  document.getElementById('btn-demo').addEventListener('click',function(){
+    const email=document.getElementById('email').value.trim();
+    window.open(calendlyUrlWithParams(email),'_blank','noopener,noreferrer');
+  });
   document.querySelector('.calendly-inline-widget').setAttribute('data-url',calendlyUrlWithParams(''));
   document.getElementById('year').textContent=new Date().getFullYear();
 </script>
-</body></html>
