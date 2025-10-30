@@ -138,11 +138,11 @@
 <footer>© <span id="year"></span> SintonIA Agency. Todos los derechos reservados.</footer>
 
   <script>
-  const CALENDLY_URL = "https://calendly.com/luisriosroda/30min";  // ← con https://
+  const CALENDLY_URL = "https://calendly.com/luisriosroda/30min";
   function calendlyUrlWithParams(email){
     const base = CALENDLY_URL;
-    const sep = base.includes('?') ? '&' : '?';
-    const utm = 'utm_source=landing&utm_medium=cta&utm_campaign=demo';
+    const sep  = base.includes('?') ? '&' : '?';
+    const utm  = 'utm_source=landing&utm_medium=cta&utm_campaign=demo';
     const mail = email ? '&email=' + encodeURIComponent(email) : '';
     return base + sep + utm + mail;
   }
