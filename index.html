@@ -187,3 +187,30 @@
   document.querySelector('.calendly-inline-widget').setAttribute('data-url',calendlyUrlWithParams(''));
   document.getElementById('year').textContent=new Date().getFullYear();
 </script>
+  <script>
+(function () {
+  function sendCalendlyEvent(href, source) {
+    if (typeof gtag !== 'function') return;
+    gtag('event', 'calendly_click', {
+      event_category: 'engagement',
+      event_label: source || 'cta',
+      link_url: href,
+      value: 1
+    });
+  }
+
+  // Captura cualquier clic a enlaces de calendly.com
+  document.addEventListener('click', function (e) {
+    const a = e.target.closest('a[href]');
+    if (!a) return;
+    const href = a.href || '';
+    if (href.includes('calendly.com')) {
+      const source = a.id || (a.textContent || '').trim().slice(0, 60);
+      sendCalendlyEvent(href, source);
+    }
+  }, { capture: true });
+})();
+</script>
+</body>
+</html>
+
