@@ -211,6 +211,67 @@
   }, { capture: true });
 })();
 </script>
+  <script>
+(function () {
+  // Helper: saca la etiqueta (label) del CTA
+  function getSourceLabel(el){
+    if(!el) return '';
+    return el.getAttribute('data-source') || el.id || (el.textContent || '').trim().slice(0, 30);
+  }
+
+  // Redefine/expone la función para enviar evento de Calendly con label y link
+  window.sendCalendlyEvent = function(href, sourceEl){
+    try{
+      var label = typeof sourceEl === 'string' ? sourceEl : getSourceLabel(sourceEl);
+      if (typeof gtag === 'function') {
+        gtag('event','calendly_click',{
+          event_category:'engagement',
+          event_label: label || 'cta',
+          link_url: href || '',
+          value: 1
+        });
+      }
+    }catch(e){}
+  };
+
+  // Adjunta listeners a CTAs conocidos para pasar la fuente
+  ['cta-header','cta-hero','btn-prices','cta-starter','cta-growth','cta-pro','btn-demo'].forEach(function(id){
+    var el = document.getElementById(id);
+    if(!el) return;
+    el.addEventListener('click', function(e){
+      var href = (e.currentTarget && e.currentTarget.href) || '';
+      sendCalendlyEvent(href, e.currentTarget);
+    });
+  });
+
+  // pricing_view cuando la sección de precios sea visible
+  var precios = document.getElementById('precios') || document.querySelector('section#precios');
+  if (precios && typeof IntersectionObserver !== 'undefined'){
+    var seen = false;
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting && !seen){
+          seen = true;
+          if (typeof gtag === 'function') gtag('event','pricing_view');
+          io.disconnect();
+        }
+      });
+    },{threshold:0.25});
+    io.observe(precios);
+  }
+
+  // scroll_50 al pasar el 50% de la página
+  var fired50 = false;
+  window.addEventListener('scroll', function(){
+    if (fired50) return;
+    var scrolled = (window.scrollY + window.innerHeight) / document.documentElement.scrollHeight;
+    if (scrolled >= 0.5) {
+      fired50 = true;
+      if (typeof gtag === 'function') gtag('event','scroll_50');
+    }
+  });
+})();
+</script>
 </body>
 </html>
 
