@@ -272,6 +272,29 @@
   });
 })();
 </script>
+  <script>
+  // Escucha los mensajes de Calendly para detectar cuando se agenda una reunión
+  window.addEventListener('message', function (e) {
+    // Los embeds de Calendly envían eventos por postMessage con "calendly."
+    if (!e.data || !e.data.event || !String(e.data.event).startsWith('calendly')) return;
+
+    if (e.data.event === 'calendly.event_scheduled') {
+      const p = e.data.payload || {};
+      const inviteeEmail = p.invitee?.email || '';
+      const eventName    = p.event?.name || '';
+      const startTime    = p.event?.start_time || '';
+
+      if (typeof gtag === 'function') {
+        gtag('event', 'calendly_booked', {
+          event_category: 'engagement',
+          event_label: eventName,
+          invitee_email: inviteeEmail,
+          start_time: startTime
+        });
+      }
+    }
+  });
+</script>
 </body>
 </html>
 
